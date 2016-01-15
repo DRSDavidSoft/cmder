@@ -454,6 +454,10 @@ void StartCmder(std::wstring  path = L"", bool is_single_mode = false, std::wstr
 		SetEnvironmentVariable(L"CMDER_USER_CONFIG", userConfigDirPath);
 		SetEnvironmentVariable(L"CMDER_USER_BIN", userBinDirPath);
 	}
+	
+	// Ensure EnvironmentVariables are propagated.
+	SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)"Environment", SMTO_ABORTIFHUNG, 5000, NULL);
+	SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM) L"Environment", SMTO_ABORTIFHUNG, 5000, NULL); // For Windows >= 8
 
 	// Ensure EnvironmentVariables are propagated.
 
