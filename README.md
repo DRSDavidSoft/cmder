@@ -220,6 +220,16 @@ You can write `*.cmd|*.bat`, `*.ps1`, and `*.sh` scripts and just drop them in t
    shstatus = false    # Opt out of Git status for 'bash.exe' shells.
  ```
 
+### Linux like 'profile.d' support for all supported shell types.
+You can write *.cmd|*.bat, *.ps1, and *.sh scripts and just drop them in the %CMDER_ROOT%\config\profile.d folder to add startup config to Cmder.
+
+|Shell|Cmder 'Profile.d' Scripts|
+| ------------- |:-------------:|
+|Cmder|%CMDER_ROOT%\config\profile.d\*.bat and *.cmd|
+|Powershell|$ENV:CMDER_ROOT\config\profile.d\*.ps1|
+|Bash/Mintty|$CMDER_ROOT/config/profile.d/*.sh|
+
+
 ### Aliases
 #### Cmder(`Cmd.exe`) Aliases
 You can define simple aliases for `cmd.exe` sessions with a command like `alias name=command`.  Cmd.exe aliases support optional parameters through the `$1-9` or the `$*` special characters so the alias `vi=vim.exe $*` typed as `vi [filename]` will open `[filename]` in `vim.exe`.
