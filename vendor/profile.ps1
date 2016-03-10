@@ -148,6 +148,10 @@ $env:gitLoaded = $null
     Microsoft.PowerShell.Utility\Write-Host "`nλ" -NoNewLine -ForegroundColor "DarkGray"
 }
 
+if (Get-Module PSReadline -ErrorAction "SilentlyContinue") {
+    Set-PSReadlineOption -ExtraPromptLineCount 1
+}
+
 # Enhance Path
 $env:Path = "$Env:CMDER_ROOT\bin;$Env:CMDER_ROOT\vendor\bin;$env:Path;$Env:CMDER_ROOT"
 
