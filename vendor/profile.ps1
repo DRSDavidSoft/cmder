@@ -34,7 +34,7 @@ if ($env:CMDER_DEBUG -and ($env:CMDER_DEBUG -match '^(1|true)$')) {
 }
 
 # Add Cmder modules directory to the autoload path.
-$CmderModulePath = Join-path $PSScriptRoot "psmodules/"
+$CmderModulePath = Join-path $PSScriptRoot "\psmodules/"
 
 # Import Cmder functions
 $CmderFunctions  = Join-Path $CmderModulePath "Cmder.ps1"
