@@ -268,7 +268,7 @@ function Register-Cmder(){
     )
     Begin
     {
-        New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
+        New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT > $null
     }
     Process
     {
@@ -287,7 +287,7 @@ function Register-Cmder(){
 function Unregister-Cmder{
     Begin
     {
-        New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
+        New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT > $null
     }
     Process
     {
