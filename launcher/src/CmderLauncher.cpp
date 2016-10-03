@@ -419,6 +419,16 @@ void StartCmder(std::wstring  path = L"", bool is_single_mode = false, std::wstr
 	{
 		swprintf_s(args, L"%s /dir \"%s\"", args, cmderStart.c_str());
 	}
+	else {
+		if (!CopyFile(cfgPath, oldCfgPath, FALSE))
+		{
+			MessageBox(NULL,
+				(GetLastError() == ERROR_ACCESS_DENIED)
+				? L"Failed to backup ConEmu.xml file to ./config folder!"
+				: L"Failed to backup ConEmu.xml file to ./config folder!", MB_TITLE, MB_ICONSTOP);
+			exit(1);
+		}
+	}
 
 	if (is_single_mode)
 	{
