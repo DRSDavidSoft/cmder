@@ -86,7 +86,7 @@ if ($Compile) {
         throw "MSBuild failed to build the launcher executable."
     }
     else {
-        Write-Verbose "successfully built Cmder $Version!"
+        Write-Verbose "successfully built Cmder v$Version!"
     }
     Pop-Location
 }
