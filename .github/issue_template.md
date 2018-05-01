@@ -76,3 +76,36 @@
 
 ### Description of the issue 
 <!-- Provide a clear, simple description of your issue here -->
+
+
+##### Steps to reproduce
+1. 
+2. 
+
+##### Expected result
+<!-- Write what you expected to happedn in Cmder here -->
+
+##### Actual result
+<!-- Write what actually happened in Cmder instead of what you expected to happen here -->
+
+<!-- Please provide additional information about your Cmder installation below, if applicaple --->
+
+### What configuration of Cmder was used?
+
+#### Cmder version
+- [ ] Latest stable builds
+- [ ] Latest development/nightly builds
+- [ ] Older version <!-- Please write your version here --> ( version:  )
+
+#### Cmder edition
+- [ ] Cmder full edition (with vendored Git)
+- [ ] Cmder mini edition
+
+#### Cmder integration
+##### Cmder with Terminals
+- [ ] Cmder with ConEmu
+- [ ] Cmder with Hyper.is
+##### Cmder with IDEs
+- [ ] Cmder with VS Code
+- [ ] Cmder with IntelliJ
+- [ ] Cmder with Sublime
