@@ -13,6 +13,7 @@ goto :parseArgument
 
 :doShift
   shift
+  exit /b 0
 
 :parseArgument
 set "currenArgu=%~1"
@@ -29,7 +30,7 @@ if /i "%currenArgu%" equ "/setPath" (
   goto :help
 ) else if /i "%currenArgu%" equ "NOT" (
   set "feNot=true"
-  goto :doShift
+  call :doShift
 ) else (
   if "%~1" equ "" goto :wrongSyntax
   if "%~2" equ "" goto :wrongSyntax
@@ -77,10 +78,10 @@ exit /b
 
 :help
 echo.
-echo CExec - Conditional Exec
+echo CExec - Conditional Execution
 echo.
-echo Handles with custom arguments for cmder's init.bat.
-echo   written by xiazeyu, inspired DRSDavidSoft.
+echo Handles user custom arguments for Cmder's init.bat
+echo   written by xiazeyu, inspired by DRSDavidSoft
 echo.
 echo Usage:
 echo.
