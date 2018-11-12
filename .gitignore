@@ -19,6 +19,8 @@ config/*
 
 config_user/*
 
+config_user/*
+
 Thumbs.db
 *.exe
 *.dll
