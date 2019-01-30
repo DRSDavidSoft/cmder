@@ -4,6 +4,7 @@
 #include "resource.h"
 #include <vector>
 #include <shlobj.h>
+#include <direct.h>
 
 #include <regex>
 #include <iostream>
@@ -14,6 +15,8 @@
 #ifndef UNICODE
 #error "Must be compiled with unicode support."
 #endif
+
+#define GetCurrentDir _getcwd
 
 #define USE_TASKBAR_API (_WIN32_WINNT >= _WIN32_WINNT_WIN7)
 
@@ -69,7 +72,13 @@ bool FileExists(const wchar_t * filePath)
 	return false;
 }
 
-void StartCmder(std::wstring  path = L"", bool is_single_mode = false, std::wstring taskName = L"", std::wstring cfgRoot = L"", bool use_user_cfg = true)
+std::string getWorkingDir()
+{
+   char cCurrentPath[FILENAME_MAX];
+   return ( GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)) ? std::string( cCurrentPath ) : std::string("") );
+}
+
+void StartCmder(std::wstring path = L"", bool is_single_mode = false, std::wstring taskName = L"", std::wstring cfgRoot = L"", bool use_user_cfg = true)
 {
 #if USE_TASKBAR_API
 	wchar_t appId[MAX_PATH] = { 0 };
@@ -368,6 +377,15 @@ void StartCmder(std::wstring  path = L"", bool is_single_mode = false, std::wstr
 	}
 
 	swprintf_s(args, L"%s /Icon \"%s\" /Title Cmder", args, icoPath);
+
+	// If no start path is specified,
+	if (streqi(cmderStart.c_str(), L""))
+	{
+		std::string cwd_path = getWorkingDir();
+
+		// fallback to the current working directory
+		std::copy(cwd_path.begin(), cwd_path.end(), cmderStart.begin());
+	}
 
 	if (!streqi(cmderStart.c_str(), L""))
 	{
