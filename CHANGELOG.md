@@ -498,7 +498,7 @@
 * Cmder now opens in the in the current working dir
 * TBD
 
-## [1.3.14-pre](https://github.com/cmderdev/cmder) [Unreleased]
+## 1.3.14-pre [Unreleased]
 
 ### Fixes
 
