@@ -9,7 +9,7 @@
   Make sure that you have:
 
   • Searched for existing issues (including the **closed** ones)
-    for the similar problems here:
+    for similar problems, at the link below:
 
     https://github.com/cmderdev/cmder/issues?q=is:issue
 
@@ -26,7 +26,7 @@
 
     https://github.com/Maximus5/ConEmu/issues?q=is:issue
 
-    If there isn't an existing issue, you may open a new one there.
+    If there are no existing issues, you may open a new one there.
 
     (We don't resolve issues regarding ConEmu here, so please
      make sure you open the issue in the correct place.)
@@ -45,7 +45,7 @@
     (Be sure to also check “Closed” issues in the labels section!)
 
   • If you have a request to provide auto-complete support for a new tool,
-    please post your request here:
+    please post your request here instead:
 
     https://github.com/vladimir-kotikov/clink-completions/issues
 
@@ -65,12 +65,15 @@
     specifically at each of the corresponding repositories for the best
     result.
 
-    ► Try to reproduce the bug you're reporting, on a stand-alone edition
-      of each tool, without using Cmder.  If the bug applies when the
-      mentioned tools are NOT used within Cmder, there's a good chance that
-      you should open the bug at the corresponding repo instead.
+    If the problem is isolated to the upstream tool itself, report it
+    directly to the upstream tool's project maintainers.
 
-  • Lastly, have a look at official documentation for Cmder over
+    ► Try to reproduce the bug you're reporting on a stand-alone edition
+      of each tool -- without using Cmder.  If the bug applies when the
+      mentioned tools are NOT used within Cmder, there's a good chance that
+      you should open the issue at the corresponding repo instead.
+
+  • Lastly, have a look at the official documentation for Cmder over
     our website, and our wiki.
 
     Read more on about Cmder on ConEmu docs:
@@ -83,8 +86,9 @@
 
 <!--
   Some tips on how to write a better report:
-  - Put an `x` into all the boxes [ ] relevant to your issue (correct example: [x] -- not like this: [ x] or [x ]).
-  - Any text that is between the the commment tags will get ignored, e.g.: <!-- this will NOT work -- >
+  - Put an `x` into all the boxes [ ] relevant to your issue
+    (correct example: [x] -- not like this: [ x] or [x ]).
+  - Any text that is between the comment tags will get ignored, e.g.: <!-- this will NOT work -- >
     You need to write your text either outside the tags, or the line below it.
   - Use the *Preview* tab to see how your issue will actually look like, before sending it.
     ⚠ If for some reason you can not see the text you just wrote, make sure you've read the instructions clearly
