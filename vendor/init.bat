@@ -52,6 +52,12 @@ call "%cmder_root%\vendor\lib\lib_path"
 call "%cmder_root%\vendor\lib\lib_git"
 call "%cmder_root%\vendor\lib\lib_profile"
 
+if "%CMDER_CONFIGURED%" == "1" (
+  echo Cmder is already configured, skipping to user config!
+
+  goto USER_CONFIG_START
+)
+
 :var_loop
     if "%~1" == "" (
         goto :start
