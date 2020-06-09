@@ -246,6 +246,12 @@ if "%CMDER_CONFIGURED%" GTR "1" (
     goto :USER_CONFIG_START
 )
 
+if "%CMDER_CONFIGURED%" == "1" (
+  echo Cmder is already configured, skipping to user config!
+
+  goto USER_CONFIG_START
+)
+
 :: Prepare for git-for-windows
 
 :: Detect which git.exe version to use
