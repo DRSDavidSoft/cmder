@@ -498,7 +498,7 @@
 * Cmder now opens in the in the current working dir
 * TBD
 
-## [Unreleased]
+## [1.3.17](https://github.com/cmderdev/cmder/tree/v1.3.17) (2020-12-23)
 
 ### Fixes
 
