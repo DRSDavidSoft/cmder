@@ -498,6 +498,22 @@
 * Cmder now opens in the in the current working dir
 * TBD
 
+## [Unreleased]
+
+### Adds
+
+- Configurable promtpt for `cmd.exe` sessions.  See `%cmder_root%\config\cmder_prompt_config.lua`
+  - Configurable colors
+  - Option to change `λ` to another character.
+  - Option to add `[user]@[host]` to the prompt
+  - Option to use of `~` to represent `$HOME` folder.
+  - Option to use folder name vs. full working directory path in prompt.
+  - Option to use single line prompt.
+
+### Fixes
+
+- Git prompt opt-out works better with additional changes to `clink-completions`
+
 ## [1.3.18](https://github.com/cmderdev/cmder/tree/v1.3.18) (2021-3-26)
 
 ### Changes
