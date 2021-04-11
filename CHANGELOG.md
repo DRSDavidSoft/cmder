@@ -502,7 +502,7 @@
 
 ### Adds
 
-- Configurable promtpt for `cmd.exe` sessions.  See `%cmder_root%\config\cmder_prompt_config.lua`
+- Configurable prompt for `cmd.exe` sessions.  See `%cmder_root%\config\cmder_prompt_config.lua`
   - Configurable colors
   - Option to change `λ` to another character.
   - Option to add `[user]@[host]` to the prompt
