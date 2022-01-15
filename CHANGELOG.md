@@ -498,7 +498,7 @@
 * Cmder now opens in the in the current working dir
 * TBD
 
-## [1.3.18](https://github.com/cmderdev/cmder/tree/v1.3.19) (2022-01-15)
+## [1.3.19](https://github.com/cmderdev/cmder/tree/v1.3.19) (2022-01-15)
 
 ### Changes
 
