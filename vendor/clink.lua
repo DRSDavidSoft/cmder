@@ -199,7 +199,7 @@ local function set_prompt_filter()
     if uah ~= '' then uah = get_uah_color() .. uah end
     if cwd ~= '' then cwd = get_cwd_color() .. cwd end
 
-    local version_control = prompt_includeVersionControl and "{git}{hg}{svn}" or ""
+    local version_control = prompt_includeVersionControl and " {git}{hg}{svn}" or ""
 
     local prompt = "{uah}{cwd}" .. version_control .. cr .. get_lamb_color() .. "{env}{lamb}\x1b[0m "
     prompt = gsub_plain(prompt, "{uah}", uah)
