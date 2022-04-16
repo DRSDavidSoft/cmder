@@ -128,6 +128,11 @@
 
 ## [1.3.20](https://github.com/cmderdev/cmder/tree/v1.3.20) (2022-03-18)
 
+### Fixes
+
+- Remove setting `term=cygwin` in `init.bat` to fix random `ABCD` characters when using arrow keys in `vim`.
+  - See: [Sometimes pressing on arrow keys prints symbols #1691](https://github.com/Maximus5/ConEmu/issues/169)
+
 ### Changes
 
 - Update Git for Windows to 2.38.0.windows.1
