@@ -58,6 +58,12 @@ if (-not (Test-Path -PathType container $saveTo)) {
 
 $saveTo = Resolve-Path $saveTo
 
+If(-not (Test-Path -PathType container $saveTo)) {
+      New-Item -ItemType Directory -Path $saveTo
+}
+
+$saveTo = Resolve-Path $saveTo
+
 $version = Get-VersionStr
 (New-Item -ItemType file "$cmderRoot\Version $version") | Out-Null
 
