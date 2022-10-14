@@ -1,6 +1,6 @@
 <#
 .Synopsis
-    Pack cmder
+    Pack Cmder
 .DESCRIPTION
     Use this script to pack cmder into release archives
 
@@ -29,11 +29,13 @@ Param(
     # -whatif switch to not actually make changes
 
     # Path to the vendor configuration source file
-    [string]$cmderRoot = "..",
+    [string]$cmderRoot = "$PSScriptRoot\..",
 
     # Vendor folder locaton
-    [string]$saveTo = "..\build"
+    [string]$saveTo = "$PSScriptRoot\..\build"
 )
+
+$cmderRoot = Resolve-Path $cmderRoot
 
 . "$PSScriptRoot\utils.ps1"
 $ErrorActionPreference = "Stop"
@@ -42,14 +44,26 @@ Ensure-Executable "7z"
 $targets = @{
     "cmder.zip" = $null;
     "cmder.7z" = $null;
-    "cmder_mini.zip" = "-x!`"vendor\git-for-windows`"";
+    "cmder_mini.zip" = "-x!`"$cmderRoot\vendor\git-for-windows`"";
 }
 
-Delete-Existing "..\Version*"
-Delete-Existing "..\build\*"
+Delete-Existing "$cmderRoot\Version*"
+Delete-Existing "$cmderRoot\build\*"
+
+If(-not (Test-Path -PathType container $saveTo)) {
+    (New-Item -ItemType Directory -Path $saveTo) | Out-Null
+}
+
+$saveTo = Resolve-Path $saveTo
 
 $version = Get-VersionStr
 (New-Item -ItemType file "$cmderRoot\Version $version") | Out-Null
+
+if ($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent) {
+    Write-Verbose "Packing Cmder $version in $saveTo..."
+    $excluded = (Get-Content -Path "$cmderRoot\packignore") -Split [System.Environment]::NewLine | Where-Object {$_}
+    Get-ChildItem $cmderRoot -Force -Exclude $excluded
+}
 
 foreach ($t in $targets.GetEnumerator()) {
     Create-Archive $cmderRoot "$saveTo\$($t.Name)" $t.Value
