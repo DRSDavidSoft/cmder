@@ -524,16 +524,16 @@
 
 - Update Git for Windows to 2.34.0
 - Update to Clink 1.2.46
-- Update to stable Conemu 210912
+- Update to stable ConEmu 210912
 - Do not rely on having a `%cmder_root%\config\cmder_prompt_config.lua`
 
 ### Adds
 
-- Powershell Git version Discovery - See #2373 for the full proposal.
+- PowerShell Git version Discovery - See #2373 for the full proposal.
   - Find user installed Git on Path
     - If found
       - if newer than Cmder embedded Git
-        - Use it's existing Path config and completely ignore embedded Git.
+        - Use its existing Path config and completely ignore embedded Git.
       - Else if Cmder embedded Git exists and is newer
         - Match User installed Git path config using Cmder embedded Git folders.
     - Else if Cmder embedded Git exists
@@ -619,7 +619,7 @@
 
 ### Changes
 
-* Update to Conemu 19.10.12
+* Update to ConEmu 19.10.12
 
 ### Adds
 
@@ -631,7 +631,7 @@
       status = false
     ```
 
-* #2174 `--` Syntax to pass command line options to Conemu.
+* #2174 `--` Syntax to pass command line options to ConEmu.
 * Disable Clink Logging
 * Add `~` tab completion.
 
@@ -640,7 +640,7 @@
 
 * Fix #2191: profile.ps1: CheckGit does not export $gitLoaded
 * Fix #2192: Set default prompt hooks before loading user profile
-* Fix #2097, #1899: powershell foreground color changing to green
+* Fix #2097, #1899: PowerShell foreground color changing to green
 * Fix #1979: Update Clink Completions to 0.3.4
 * Fix #1678: Cmder corrupting path with `!` in Cmder folder path.
 
@@ -710,13 +710,13 @@
 ### Fixes
 
 * Replaces Cmder Release v1.3.9 which has been removed.
-* /c now completely separates user config including Conemu configuration. This enables true multi-user Cmder with no configuration collisions. See PR #1949.
+* /c now completely separates user config including ConEmu configuration. This enables true multi-user Cmder with no configuration collisions. See PR #1949.
 * Fix #1959 Start cmder "find" errors. See PR #1961.
 * Fix #1956 Git detection should use env from git install root. See PR #1969
 
 ### Adds
 
-* /m initially creates %cmder_root%/config/conemu-%computername%.xml for users that want per computer Conemu configuration with shared init scripts. See PR #1949.
+* /m initially creates %cmder_root%/config/ConEmu-%computername%.xml for users that want per computer ConEmu configuration with shared init scripts. See PR #1949.
 * /register now recognizes /c [path] and creates an appropriate Cmder Here shell context menu. See PR #1949.
 
 ## [1.3.8](https://github.com/cmderdev/cmder/tree/v1.3.8) (2018-11-10)
@@ -771,7 +771,7 @@
 * Profile.ps1 (#1796)
 * Fix lib base (#1794)
 * Little Changes
-* Fixed move of default conemu.xml to the vendor folder
+* Fixed move of default ConEmu.xml to the vendor folder
 * ignore all of config folder
 * move default comemu.xml to vendor folder
 * fixes
@@ -797,7 +797,7 @@
 
 ### Dmitri S. Guskov (2):
 
-* Powershell 5.1 compatibility
+* PowerShell 5.1 compatibility
 * Update profile.ps1
 
 ### Gregory Lucas (1):
@@ -832,8 +832,8 @@
 ### xiazeyu (4):
 
 * chore: unite slash
-* docs: update to latest useage
-* refactor: reduce global varible useage, fixed quote issue, added parameters support
+* docs: update to latest usage
+* refactor: reduce global variable usage, fixed quote issue, added parameters support
 * doc: fix typo
 
 ### xiazeyu_2011 (8):
