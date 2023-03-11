@@ -551,6 +551,7 @@ set initialConfig=
   set CMDER_INIT_END=
   set CMDER_INIT_START=
   set CMDER_USER_FLAGS=
+  set CMDER_CLINK=
   set debug_output=
   set fast_init=
   set max_depth=
