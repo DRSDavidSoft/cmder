@@ -715,6 +715,11 @@ cmderOptions GetOption()
 	int argCount;
 
 	wchar_t windowsTerminalDir[MAX_PATH] = { 0 };
+	wchar_t exeDir[MAX_PATH] = { 0 };
+
+	GetModuleFileName(NULL, exeDir, sizeof(exeDir));
+	PathRemoveFileSpec(exeDir);
+
 	PathCombine(windowsTerminalDir, exeDir, L"vendor\\windows-terminal");
 
 	szArgList = CommandLineToArgvW(GetCommandLine(), &argCount);
@@ -877,7 +882,12 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	cmderOptions cmderOptions = GetOption();
 
 	wchar_t windowsTerminalDir[MAX_PATH] = { 0 };
-	PathCombine(windowsTerminalDir, exeDir, L"vendor\\windows-terminal");
+	wchar_t exeDir[MAX_PATH] = { 0 };
+
+	GetModuleFileName(NULL, exeDir, sizeof(exeDir));
+	PathRemoveFileSpec(exeDir);
+
+  PathCombine(windowsTerminalDir, exeDir, L"vendor\\windows-terminal");
 
 	if (cmderOptions.registerApp == true)
 	{
