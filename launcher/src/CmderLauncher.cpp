@@ -612,7 +612,7 @@ void StartCmder(std::wstring  path = L"", bool is_single_mode = false, std::wstr
 	si.dwFlags = STARTF_TITLEISAPPID;
 #endif
 	PROCESS_INFORMATION pi;
-	
+
 	// MessageBox(NULL, terminalPath, _T("Error"), MB_OK);
 	// MessageBox(NULL, args, _T("Error"), MB_OK);
 
@@ -889,7 +889,7 @@ cmderOptions GetOption()
 				{
 					szArgList[i][len - 1] = '\0';
 				}
-		
+
 				if (PathFileExists(szArgList[i]))
 				{
 					cmderOptions.cmderStart = szArgList[i];
