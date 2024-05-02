@@ -1,6 +1,6 @@
 # Cmder
 
-[![Join the chat at https://gitter.im/cmderdev/cmder](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cmderdev/cmder?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://ci.appveyor.com/api/projects/status/github/cmderdev/cmder?branch=master&svg=true)](https://ci.appveyor.com/project/MartiUK/cmder) [![Build Status](https://github.com/cmderdev/cmder/actions/workflows/build.yml/badge.svg)](https://github.com/cmderdev/cmder/actions/workflows/build.yml)
+[![Join the chat at https://gitter.im/cmderdev/cmder](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cmderdev/cmder?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://ci.appveyor.com/api/projects/status/github/cmderdev/cmder?branch=master&svg=true)](https://ci.appveyor.com/project/cmderdev/cmder) [![Build Status](https://github.com/cmderdev/cmder/actions/workflows/build.yml/badge.svg)](https://github.com/cmderdev/cmder/actions/workflows/build.yml)
 
 Cmder is a **software package** created out of pure frustration over absence of usable console emulator on Windows. It is based on [ConEmu](https://conemu.github.io/) with *major* config overhaul, comes with a Monokai color scheme, amazing [clink](https://chrisant996.github.io/clink/) (further enhanced by [clink-completions](https://github.com/vladimir-kotikov/clink-completions)) and a custom prompt layout.
 
@@ -8,7 +8,7 @@ Cmder is a **software package** created out of pure frustration over absence of 
 
 ## Why use it
 
-The main advantage of Cmder is portability. It is designed to be totally self-contained with no external dependencies, which makes it great for **USB Sticks** or **cloud storage**. So you can carry your console, aliases and binaries (like wget, curl and git) with you anywhere.
+The main advantage of Cmder is portability. It is designed to be totally self-contained with no external dependencies, which makes it great for **USB Sticks** or **cloud storage**. So you can carry your console, aliases and binaries (like `wget`, `curl` and `git`) with you anywhere.
 
 The Cmder's user interface is also designed to be more eye pleasing, and you can compare the main differences between Cmder and ConEmu [here](https://conemu.github.io/en/cmder.html).
 
@@ -71,7 +71,7 @@ So you've experimented with Cmder a little and want to give it a shot in a more 
 1. Open a terminal as an Administrator
 2. Navigate to the directory you have placed Cmder
 3. Execute `.\cmder.exe /REGISTER ALL`
-   _If you get a message "Access Denied" ensure you are executing the command in an **Administrator** prompt._
+   _If you get an "Access Denied" message, make sure you are executing the command in an **Administrator** prompt._
 
 In a file explorer window right click in or on a directory to see "Cmder Here" in the context menu.
 
@@ -115,11 +115,11 @@ You can open multiple tabs each containing one of the following shells:
 
 Cmder, PowerShell, and Bash tabs all run on top of the Windows Console API and work as you might expect in Cmder with access to use ConEmu's color schemes, key bindings and other settings defined in the ConEmu Settings dialog.
 
-⚠ *NOTE:* Only the full edition of Cmder comes with a pre-installed bash, using a vendored [git-for-windows](https://gitforwindows.org/) installation. The pre-configured Bash tabs may not work on Cmder mini edition without additional configuration.
+⚠ *Note:* Only the full edition of Cmder comes with a pre-installed bash, using a vendored [git-for-windows](https://gitforwindows.org/) installation. The pre-configured Bash tabs may not work on Cmder mini edition without additional configuration.
 
 You may however, choose to use an external installation of bash, such as Microsoft's [Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) (called WSL) or the [Cygwin](https://cygwin.com/) project which provides POSIX support on windows.
 
-⚠ *NOTE:* Mintty tabs use a program called 'mintty' as the terminal emulator that is not based on the Windows Console API, rather it's rendered graphically by ConEmu. Mintty differs from the other tabs in that it supports xterm/xterm-256color TERM types, and does not work with ConEmu settings like color schemes and key bindings.  As such, some differences in functionality are to be expected, such as Cmder not being able to apply a system-wide configuration to it.
+⚠ *Note:* Mintty tabs use a program called 'mintty' as the terminal emulator that is not based on the Windows Console API, rather it's rendered graphically by ConEmu. Mintty differs from the other tabs in that it supports xterm/xterm-256color TERM types, and does not work with ConEmu settings like color schemes and key bindings.  As such, some differences in functionality are to be expected, such as Cmder not being able to apply a system-wide configuration to it.
 
 As a result mintty specific config is done via the `[%USERPROFILE%|$HOME]/.minttyrc` file.  You may read more about Mintty and its config file [here](https://github.com/mintty/mintty).
 
@@ -188,7 +188,7 @@ Documentation is in the file for each setting.
 | (custom arguments)              | User defined arguments processed by `cexec`. Type `cexec /?` for more usage.                                                                      | not set                                |
 
 ### Cmder Shell User Config
-Single user portable configuration is possible using the cmder specific shell config files.  Edit the below files to add your own configuration:
+Single user portable configuration is possible using the Cmder specific shell config files.  Edit the below files to add your own configuration:
 
 | Shell         | Cmder Portable User Config                |
 | ------------- | ----------------------------------------- |
@@ -196,7 +196,7 @@ Single user portable configuration is possible using the cmder specific shell co
 | PowerShell    | `$ENV:CMDER_ROOT\config\user_profile.ps1` |
 | Bash/Mintty   | `$CMDER_ROOT/config/user_profile.sh`      |
 
-Note: Bash and Mintty sessions will also source the `$HOME/.bashrc` file if it exists after it sources `$CMDER_ROOT/config/user_profile.sh`.
+**Note:** Bash and Mintty sessions will also source the `$HOME/.bashrc` file if it exists after it sources `$CMDER_ROOT/config/user_profile.sh`.
 
 You can write `*.cmd|*.bat`, `*.ps1`, and `*.sh` scripts and just drop them in the `%CMDER_ROOT%\config\profile.d` folder to add startup config to Cmder.
 
@@ -230,7 +230,7 @@ Aliases defined using the `alias.bat` command will automatically be saved in the
 
 To make an alias and/or any other profile settings permanent add it to one of the following:
 
-Note: These are loaded in this order by `$CMDER_ROOT/vendor/init.bat`.  Anything stored in `%CMDER_ROOT%` will be a portable setting and will follow cmder to another machine.
+Note: These are loaded in this order by `$CMDER_ROOT/vendor/init.bat`.  Anything stored in `%CMDER_ROOT%` will be a portable setting and will follow Cmder to another machine.
 
 * `%CMDER_ROOT%\config\profile.d\*.cmd` and `\*.bat`
 * `%CMDER_ROOT%\config\user_aliases.cmd`
@@ -241,7 +241,7 @@ Bash shells support simple and complex aliases with optional parameters natively
 
 To make an alias and/or any other profile settings permanent add it to one of the following:
 
-Note: These are loaded in this order by `$CMDER_ROOT/vendor/git-for-windows/etc/profile.d/cmder.sh`.  Anything stored in `$CMDER_ROOT` will be a portable setting and will follow cmder to another machine.
+Note: These are loaded in this order by `$CMDER_ROOT/vendor/git-for-windows/etc/profile.d/cmder.sh`.  Anything stored in `$CMDER_ROOT` will be a portable setting and will follow Cmder to another machine.
 
 * `$CMDER_ROOT/config/profile.d/*.sh`
 * `$CMDER_ROOT/config/user_profile.sh`
@@ -254,7 +254,7 @@ PowerShell has native simple alias support, for example `[new-alias | set-alias]
 
 To make an alias and/or any other profile settings permanent add it to one of the following:
 
-Note: These are loaded in this order by `$ENV:CMDER_ROOT\vendor\user_profile.ps1`.  Anything stored in `$ENV:CMDER_ROOT` will be a portable setting and will follow cmder to another machine.
+Note: These are loaded in this order by `$ENV:CMDER_ROOT\vendor\user_profile.ps1`.  Anything stored in `$ENV:CMDER_ROOT` will be a portable setting and will follow Cmder to another machine.
 
 * `$ENV:CMDER_ROOT\config\profile.d\*.ps1`
 * `$ENV:CMDER_ROOT\config\user_profile.ps1`
@@ -292,7 +292,7 @@ The destination file extension depends on the shell you use in that environment.
 * bash - Copy to `/etc/profile.d/cmder_exinit.sh`
 * zsh  - Copy to `/etc/profile.d/cmder_exinit.zsh`
 
-Uncomment and edit the below line in the script to use Cmder config even when launched from outside Cmder.
+Uncomment and edit the line below in the script to use Cmder config even when launched from outside Cmder.
 
 ```
 # CMDER_ROOT=${USERPROFILE}/cmder  # This is not required if launched from Cmder.
@@ -344,9 +344,9 @@ To conditionally start `notepad.exe` when you start a specific `cmder` task:
 
   ```
 
-To see detailed usage of `cexec`, type `cexec /?` in cmder.
+To see detailed usage of `cexec`, type `cexec /?` in Cmder.
 
-### Integrating Cmder with [Hyper](https://github.com/zeit/hyper), [Microsoft VS Code](https://code.visualstudio.com/), and your favorite IDEs
+### Integrating Cmder with [Windows Terminal](https://github.com/cmderdev/cmder/wiki/Seamless-Windows-Terminal-Integration), [VS Code](https://github.com/cmderdev/cmder/wiki/Seamless-VS-Code-Integration), and your favorite IDEs
 
 Cmder by default comes with a vendored ConEmu installation as the underlying terminal emulator, as stated [here](https://conemu.github.io/en/cmder.html).
 
@@ -386,7 +386,11 @@ If you do not have a `[cmder_root]/config/user[-|_]conemu.xml`, you are running 
 
 You can download builds of the current development branch by going to AppVeyor via the following link:
 
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/cmderdev/cmder?svg=True)](https://ci.appveyor.com/project/MartiUK/cmder/branch/master/artifacts)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/cmderdev/cmder?svg=True)](https://ci.appveyor.com/project/cmderdev/cmder/branch/master/artifacts)
+
+The latest download builds by GitHub Actions can be downloaded from the link below:
+
+[![Build Status](https://github.com/cmderdev/cmder/actions/workflows/build.yml/badge.svg)](https://github.com/cmderdev/cmder/actions/workflows/build.yml)
 
 ## License
 

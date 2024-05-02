@@ -4,17 +4,29 @@ on:
   push:
     branches:
       - master
+      - development
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - '.github/**'
+      - '**/.gitignore'
   pull_request:
     branches:
       - master
-  
+      - development
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - '.github/**'
+      - '**/.gitignore'
+
 defaults:
   run:
     shell: cmd
-    
+
 permissions:
   contents: read
-  
+
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
   cancel-in-progress: true
@@ -26,10 +38,14 @@ jobs:
     continue-on-error: false
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - name: Initialize vendors
+      shell: pwsh
+      working-directory: scripts
+      run: .\build.ps1 -verbose
     - name: Testing Clink Shell
       run: |
-          cmd /c vendor\init.bat
+          cmd /c vendor\init.bat /v /d /t
     - name: Testing PowerShell
       run: |
           PowerShell.exe -ExecutionPolicy Bypass -NoLogo -NoProfile -Command "Invoke-Expression '. ''vendor\profile.ps1'''"

@@ -1,10 +1,11 @@
-# Init Script for PowerShell
-# Created as part of cmder project
+﻿# Init Script for PowerShell
+# Created as part of Cmder project
+# NOTE: This file must be saved using UTF-8 with BOM encoding for prompt symbol to work correctly.
 
 # !!! THIS FILE IS OVERWRITTEN WHEN CMDER IS UPDATED
 # !!! Use "%CMDER_ROOT%\config\user_profile.ps1" to add your own startup commands
 
-$CMDER_INIT_START = $(Get-Date -UFormat %s)
+$CMDER_INIT_START = Get-Date
 
 # Compatibility with PS major versions <= 2
 if (!$PSScriptRoot) {
@@ -12,12 +13,12 @@ if (!$PSScriptRoot) {
 }
 
 if ($ENV:CMDER_USER_CONFIG) {
-    # Write-Host "CMDER IS ALSO USING INDIVIDUAL USER CONFIG FROM '$ENV:CMDER_USER_CONFIG'!"
+    Write-Verbose "CMDER IS ALSO USING INDIVIDUAL USER CONFIG FROM '$ENV:CMDER_USER_CONFIG'!"
 }
 
 # We do this for Powershell as Admin Sessions because CMDER_ROOT is not being set.
-if ($null -eq $ENV:CMDER_ROOT) {
-    if (-Not($null -eq $ENV:ConEmuDir)) {
+if (!$ENV:CMDER_ROOT) {
+    if ($ENV:ConEmuDir) {
         $ENV:CMDER_ROOT = Resolve-Path($ENV:ConEmuDir + "\..\..")
     } else {
         $ENV:CMDER_ROOT = Resolve-Path($PSScriptRoot + "\..")
@@ -25,9 +26,8 @@ if ($null -eq $ENV:CMDER_ROOT) {
 }
 
 # Remove trailing '\'
-$ENV:CMDER_ROOT = ($ENV:CMDER_ROOT).trimend("\")
+$ENV:CMDER_ROOT = ($ENV:CMDER_ROOT).TrimEnd("\")
 
-# Do not load bundled PsGet if a module installer is already available
 # -> recent PowerShell versions include PowerShellGet out of the box
 $moduleInstallerAvailable = [bool](Get-Command -Name 'Install-Module' -ErrorAction SilentlyContinue)
 
@@ -42,18 +42,18 @@ if(-not $moduleInstallerAvailable -and -not $env:PSModulePath.Contains($CmderMod
 }
 
 $gitVersionVendor = (readVersion -gitPath "$ENV:CMDER_ROOT\vendor\git-for-windows\cmd")
-# Write-Host "GIT VENDOR: ${gitVersionVendor}"
+Write-Debug "GIT VENDOR: ${gitVersionVendor}"
 
 # Get user installed Git Version[s] and Compare with vendored if found.
 foreach ($git in (Get-Command -ErrorAction SilentlyContinue 'git')) {
-    # Write-Host "GIT PATH: " + $git.Path
+    Write-Debug "GIT PATH: {$git.Path}"
     $gitDir = Split-Path -Path $git.Path
     $gitDir = isGitShim -gitPath $gitDir
     $gitVersionUser = (readVersion -gitPath $gitDir)
-    # Write-Host "GIT USER: ${gitVersionUser}"
+    Write-Debug "GIT USER: ${gitVersionUser}"
 
     $useGitVersion = compare_git_versions -userVersion $gitVersionUser -vendorVersion $gitVersionVendor
-    # Write-Host "Using GIT Version: ${useGitVersion}"
+    Write-Debug "Using Git Version: ${useGitVersion}"
 
     # Use user installed Git
     if ($null -eq $gitPathUser) {
@@ -65,7 +65,7 @@ foreach ($git in (Get-Command -ErrorAction SilentlyContinue 'git')) {
     }
 
     if ($useGitVersion -eq $gitVersionUser) {
-        # Write-Host "Using GIT Dir: ${gitDir}"
+        Write-Debug "Using Git Dir: ${gitDir}"
         $ENV:GIT_INSTALL_ROOT = $gitPathUser
         $ENV:GIT_INSTALL_TYPE = 'USER'
         break
@@ -78,14 +78,14 @@ if ($null -eq $ENV:GIT_INSTALL_ROOT -and $null -ne $gitVersionVendor) {
     $ENV:GIT_INSTALL_TYPE = 'VENDOR'
 }
 
-# Write-Host "GIT_INSTALL_ROOT: ${ENV:GIT_INSTALL_ROOT}"
-# Write-Host "GIT_INSTALL_TYPE: ${ENV:GIT_INSTALL_TYPE}"
+Write-Debug "GIT_INSTALL_ROOT: ${ENV:GIT_INSTALL_ROOT}"
+Write-Debug "GIT_INSTALL_TYPE: ${ENV:GIT_INSTALL_TYPE}"
 
-if (-Not ($null -eq $ENV:GIT_INSTALL_ROOT)) {
+if ($null -ne $ENV:GIT_INSTALL_ROOT) {
     $env:Path = Configure-Git -gitRoot "$ENV:GIT_INSTALL_ROOT" -gitType $ENV:GIT_INSTALL_TYPE -gitPathUser $gitPathUser
 }
 
-if (Get-Command -Name "vim" -ErrorAction silentlycontinue) {
+if (Get-Command -Name "vim" -ErrorAction SilentlyContinue) {
     New-Alias -name "vi" -value vim
 }
 
@@ -94,16 +94,20 @@ if (Get-Module PSReadline -ErrorAction "SilentlyContinue") {
 }
 
 # Pre-assign default prompt hooks so the first run of cmder gets a working prompt.
-$env:gitLoaded = $false
+$env:gitLoaded = $null
 [ScriptBlock]$PrePrompt = {}
 [ScriptBlock]$PostPrompt = {}
 [ScriptBlock]$CmderPrompt = {
+    # Check if we're currently running under Admin privileges.
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal] $identity
+    $adminRole = [Security.Principal.WindowsBuiltInRole]::Administrator
+    $color = "White"
+    if ($principal.IsInRole($adminRole)) { $color = "Red" }
     $Host.UI.RawUI.ForegroundColor = "White"
-    Write-Host -NoNewline "PS "
+    Microsoft.PowerShell.Utility\Write-Host "PS " -NoNewline -ForegroundColor $color
     Microsoft.PowerShell.Utility\Write-Host $pwd.ProviderPath -NoNewLine -ForegroundColor Green
-    if (Get-Command git -erroraction silentlycontinue) {
-        checkGit($pwd.ProviderPath)
-    }
+    checkGit($pwd.ProviderPath)
     Microsoft.PowerShell.Utility\Write-Host "`nλ" -NoNewLine -ForegroundColor "DarkGray"
 }
 
@@ -112,33 +116,31 @@ $env:Path = "$Env:CMDER_ROOT\bin;$Env:CMDER_ROOT\vendor\bin;$env:Path;$Env:CMDER
 
 # Drop *.ps1 files into "$ENV:CMDER_ROOT\config\profile.d"
 # to source them at startup.
-if (-Not (Test-Path -PathType container "$ENV:CMDER_ROOT\config\profile.d")) {
+if (-not (Test-Path -PathType container "$ENV:CMDER_ROOT\config\profile.d")) {
     New-Item -ItemType Directory -Path "$ENV:CMDER_ROOT\config\profile.d"
 }
 
 Push-Location $ENV:CMDER_ROOT\config\profile.d
 foreach ($x in Get-ChildItem *.psm1) {
-    # Write-Host Write-Host Sourcing $x
+    Write-Verbose "Sourcing $x"
     Import-Module $x
 }
-
 foreach ($x in Get-ChildItem *.ps1) {
-    # Write-Host Write-Host Sourcing $x
+    Write-Verbose "Sourcing $x"
     . $x
 }
 Pop-Location
 
 # Drop *.ps1 files into "$ENV:CMDER_USER_CONFIG\config\profile.d"
 # to source them at startup.  Requires using cmder.exe /C [cmder_user_root_path] argument
-if ($ENV:CMDER_USER_CONFIG -ne "" -And (Test-Path "$ENV:CMDER_USER_CONFIG\profile.d")) {
+if ($ENV:CMDER_USER_CONFIG -ne "" -and (Test-Path "$ENV:CMDER_USER_CONFIG\profile.d")) {
     Push-Location $ENV:CMDER_USER_CONFIG\profile.d
     foreach ($x in Get-ChildItem *.psm1) {
-        # Write-Host Write-Host Sourcing $x
+        Write-Verbose "Sourcing $x"
         Import-Module $x
     }
-
     foreach ($x in Get-ChildItem *.ps1) {
-        # Write-Host Write-Host Sourcing $x
+        Write-Verbose "Sourcing $x"
         . $x
     }
     Pop-Location
@@ -169,8 +171,10 @@ if ($ENV:CMDER_USER_CONFIG) {
     }
 }
 
-if (-Not (Test-Path $CmderUserProfilePath)) {
-    Write-Host -BackgroundColor Darkgreen -ForegroundColor White "First Run: Creating user startup file: $CmderUserProfilePath"
+if (-not (Test-Path $CmderUserProfilePath)) {
+    $CmderUserProfilePath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($CmderUserProfilePath)
+    Write-Host -NoNewline "`r"
+    Write-Host -BackgroundColor Green -ForegroundColor Black "First Run: Creating user startup file: $CmderUserProfilePath"
     Copy-Item "$env:CMDER_ROOT\vendor\user_profile.ps1.default" -Destination $CmderUserProfilePath
 }
 
@@ -190,20 +194,24 @@ if ( $(Get-Command prompt).Definition -match 'PS \$\(\$executionContext.SessionS
     Custom prompt functions are loaded in as constants to get the same behaviour
     #>
     [ScriptBlock]$Prompt = {
-        $realLASTEXITCODE = $LASTEXITCODE
+        $lastSUCCESS = $?
+        $realLastExitCode = $LastExitCode
         $host.UI.RawUI.WindowTitle = Microsoft.PowerShell.Management\Split-Path $pwd.ProviderPath -Leaf
+        Microsoft.PowerShell.Utility\Write-Host -NoNewline "$([char]0x200B)`r$([char]0x1B)[K"
+        if ($lastSUCCESS -or ($LastExitCode -ne 0)) {
+            Microsoft.PowerShell.Utility\Write-Host
+        }
         PrePrompt | Microsoft.PowerShell.Utility\Write-Host -NoNewline
         CmderPrompt
         PostPrompt | Microsoft.PowerShell.Utility\Write-Host -NoNewline
-        $global:LASTEXITCODE = $realLASTEXITCODE
+        $global:LastExitCode = $realLastExitCode
         return " "
     }
 
-
     # Once Created these code blocks cannot be overwritten
-    # if (-not $(Get-Command PrePrompt).Options -match 'Constant') {Set-Item -Path function:\PrePrompt   -Value $PrePrompt   -Options Constant}
+    # if (-not $(Get-Command PrePrompt).Options   -match 'Constant') {Set-Item -Path function:\PrePrompt   -Value $PrePrompt   -Options Constant}
     # if (-not $(Get-Command CmderPrompt).Options -match 'Constant') {Set-Item -Path function:\CmderPrompt -Value $CmderPrompt -Options Constant}
-    # if (-not $(Get-Command PostPrompt).Options -match 'Constant') {Set-Item -Path function:\PostPrompt  -Value $PostPrompt  -Options Constant}
+    # if (-not $(Get-Command PostPrompt).Options  -match 'Constant') {Set-Item -Path function:\PostPrompt  -Value $PostPrompt  -Options Constant}
 
     Set-Item -Path function:\PrePrompt   -Value $PrePrompt   -Options Constant
     Set-Item -Path function:\CmderPrompt -Value $CmderPrompt -Options Constant
@@ -215,5 +223,8 @@ if ( $(Get-Command prompt).Definition -match 'PS \$\(\$executionContext.SessionS
     Set-Item -Path function:\prompt  -Value $Prompt  -Options ReadOnly
 }
 
-$CMDER_INIT_END = $(Get-Date -UFormat %s)
-# Write-Host "Elapsed Time: $(get-Date) `($($CMDER_INIT_END - $CMDER_INIT_START) total`)"
+$CMDER_INIT_END = Get-Date
+
+$ElapsedTime = New-TimeSpan -Start $CMDER_INIT_START -End $CMDER_INIT_END
+
+Write-Verbose "Elapsed Time: $($ElapsedTime.TotalSeconds) seconds total"

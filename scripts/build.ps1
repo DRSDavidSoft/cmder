@@ -11,7 +11,7 @@
 .EXAMPLE
     .\build.ps1
 
-    Executes the default build for Cmder; Conemu, clink. This is equivalent to the "minimum" style package in the releases
+    Executes the default build for Cmder; ConEmu, clink. This is equivalent to the "minimum" style package in the releases
 .EXAMPLE
     .\build.ps1 -Compile
 
@@ -35,7 +35,7 @@
 .LINK
     http://cmder.app/ - Project Home
 #>
-[CmdletBinding(SupportsShouldProcess=$true)]
+[CmdletBinding(SupportsShouldProcess = $true)]
 Param(
     # CmdletBinding will give us;
     # -verbose switch to turn on logging and
@@ -53,10 +53,10 @@ Param(
     # Config folder location
     [string]$config = "$PSScriptRoot\..\config",
 
-    # Using this option will skip all downloads and only build launcher
+    # Using this option will skip all downloads, if you only need to build launcher
     [switch]$noVendor,
 
-    # New launcher if you have MSBuild tools installed
+    # Build launcher if you have MSBuild tools installed
     [switch]$Compile
 )
 
@@ -66,14 +66,6 @@ $cmder_root = Resolve-Path "$PSScriptRoot\.."
 # Dot source util functions into this scope
 . "$PSScriptRoot\utils.ps1"
 $ErrorActionPreference = "Stop"
-
-# Kill ssh-agent.exe if it is running from the $env:cmder_root we are building
-foreach ($ssh_agent in $(Get-Process ssh-agent -ErrorAction SilentlyContinue)) {
-    if ([string]$($ssh_agent.path) -Match [string]$cmder_root.replace('\','\\')) {
-        Write-Verbose $("Stopping " + $ssh_agent.path + "!")
-        Stop-Process $ssh_agent.id
-    }
-}
 
 if ($Compile) {
     # Check for requirements
@@ -87,7 +79,7 @@ if ($Compile) {
 
     Write-Verbose "Building the launcher..."
 
-    # Referene: https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+    # Reference: https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
     msbuild CmderLauncher.vcxproj /t:Clean,Build /p:configuration=Release /m
 
     if ($LastExitCode -ne 0) {
@@ -96,13 +88,13 @@ if ($Compile) {
     Pop-Location
 }
 
-if (-Not $noVendor) {
+if (-not $noVendor) {
     # Check for requirements
     Ensure-Exists $sourcesPath
     Ensure-Executable "7z"
 
     # Get the vendor sources
-    $sources = Get-Content $sourcesPath | Out-String | Convertfrom-Json
+    $sources = Get-Content $sourcesPath | Out-String | ConvertFrom-Json
 
     Push-Location -Path $saveTo
     New-Item -Type Directory -Path (Join-Path $saveTo "/tmp/") -ErrorAction SilentlyContinue >$null
@@ -116,8 +108,18 @@ if (-Not $noVendor) {
             $ConEmuXmlSave = Join-Path $config "ConEmu.xml"
             Write-Verbose "Backup '$ConEmuXml' to '$ConEmuXmlSave'"
             Copy-Item $ConEmuXml $ConEmuXmlSave
-        } else { $ConEmuXml = "" }
-    } else { $ConEmuXml = "" }
+        }
+        else { $ConEmuXml = "" }
+    }
+    else { $ConEmuXml = "" }
+
+    # Kill ssh-agent.exe if it is running from the $env:cmder_root we are building
+    foreach ($ssh_agent in $(Get-Process ssh-agent -ErrorAction SilentlyContinue)) {
+        if ([string]$($ssh_agent.path) -Match [string]$cmder_root.replace('\', '\\')) {
+            Write-Verbose $("Stopping " + $ssh_agent.path + "!")
+            Stop-Process $ssh_agent.id
+        }
+    }
 
     foreach ($s in $sources) {
         Write-Verbose "Getting vendored $($s.name) $($s.version)..."
@@ -130,7 +132,7 @@ if (-Not $noVendor) {
         Download-File -Url $s.url -File $vend\$tempArchive -ErrorAction Stop
         Extract-Archive $tempArchive $s.name
 
-        if ((Get-Childitem $s.name).Count -eq 1) {
+        if ((Get-ChildItem $s.name).Count -eq 1) {
             Flatten-Directory($s.name)
         }
 
@@ -160,7 +162,7 @@ if (-Not $noVendor) {
     Pop-Location
 }
 
-if (-Not $Compile -Or $noVendor) {
+if (-not $Compile -or $noVendor) {
     Write-Warning "You are not building the full project, Use -Compile without -noVendor"
     Write-Warning "This cannot be a release. Test build only!"
     return
