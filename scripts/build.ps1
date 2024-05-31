@@ -55,7 +55,7 @@ Param(
 
     # Using this option will skip all downloads, if you only need to build launcher
     [switch]$noVendor,
-    
+
     # Using this option will specify the emulator to use [none, all, conemu-maximus5, or windows-terminal]
     [string]$terminal = 'all',
 
@@ -64,7 +64,7 @@ Param(
 )
 
 # Get the scripts and cmder root dirs we are building in.
-$cmder_root = Resolve-Path "$PSScriptRoot\.."
+$cmder_root = [string](Resolve-Path "$PSScriptRoot\..")
 
 # Dot source util functions into this scope
 . "$PSScriptRoot\utils.ps1"
@@ -138,13 +138,13 @@ if (-not $noVendor) {
 
     foreach ($s in $sources) {
         if ($terminal -eq "none") {
-          return
+            return
         } elseif ($s.name -eq "conemu-maximus5" -and $terminal -eq "windows-terminal") {
-          return
+            return
         } elseif ($s.name -eq "windows-terminal" -and $terminal -eq  "conemu-maximus5") {
-          return
+            return
         }
- 
+
         Write-Verbose "Getting vendored $($s.name) $($s.version)..."
 
         # We do not care about the extensions/type of archive
@@ -157,12 +157,12 @@ if (-not $noVendor) {
 
         # Make Embedded Windows Terminal Portable
         if ($s.name -eq "windows-terminal") {
-          $windowTerminalFiles = resolve-path ($saveTo + "\" + $s.name + "\terminal*")
-          move-item -ErrorAction SilentlyContinue $windowTerminalFiles\* $s.name >$null
-          remove-item -ErrorAction SilentlyContinue $windowTerminalFiles >$null
-          write-verbose "Making Windows Terminal Portable..."
-          New-Item -Type Directory -Path (Join-Path $saveTo "/windows-terminal/settings") -ErrorAction SilentlyContinue >$null
-          New-Item -Type File -Path (Join-Path $saveTo "/windows-terminal/.portable") -ErrorAction SilentlyContinue >$null
+            $windowTerminalFiles = resolve-path ($saveTo + "\" + $s.name + "\terminal*")
+            move-item -ErrorAction SilentlyContinue $windowTerminalFiles\* $s.name >$null
+            remove-item -ErrorAction SilentlyContinue $windowTerminalFiles >$null
+            write-verbose "Making Windows Terminal Portable..."
+            New-Item -Type Directory -Path (Join-Path $saveTo "/windows-terminal/settings") -ErrorAction SilentlyContinue >$null
+            New-Item -Type File -Path (Join-Path $saveTo "/windows-terminal/.portable") -ErrorAction SilentlyContinue >$null
         }
 
         if ((Get-ChildItem $s.name).Count -eq 1) {
@@ -183,6 +183,12 @@ if (-not $noVendor) {
     if ($WinTermSettingsJson -ne "") {
         Write-Verbose "Restore '$WinTermSettingsJsonSave' to '$WinTermSettingsJson'"
         Copy-Item $WinTermSettingsJsonSave $WinTermSettingsJson
+    }
+
+    # Make Embedded Windows Terminal Portable
+    if ($emulator -eq "windows-terminal") {
+        New-Item -Type Directory -Path (Join-Path $saveTo "/windows-terminal/settings") -ErrorAction SilentlyContinue >$null
+        New-Item -Type leaf -Path (Join-Path $saveTo "/windows-terminal/.portable") -ErrorAction SilentlyContinue >$null
     }
 
     # Put vendor\cmder.sh in /etc/profile.d so it runs when we start bash or mintty
