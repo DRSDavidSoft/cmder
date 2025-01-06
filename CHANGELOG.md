@@ -126,6 +126,13 @@
 - better git path handling [\#865](https://github.com/cmderdev/cmder/pull/865) ([janschulz](https://github.com/janschulz))
 - Enhanced alias.bat to allow file storage path [\#862](https://github.com/cmderdev/cmder/pull/862) ([daxgames](https://github.com/daxgames))
 
+## Unreleased
+
+### Adds
+
+- Cmder for Windows
+    - Cmder for Windows uses Windows Native Terminals and does not contain ConEmu.
+
 ## [1.3.20](https://github.com/cmderdev/cmder/tree/v1.3.20) (2022-03-18)
 
 ### Changes
