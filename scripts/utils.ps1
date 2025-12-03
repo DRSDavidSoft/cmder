@@ -249,3 +249,73 @@ function Download-File {
     $wc.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials;
     $wc.DownloadFile($Url, $File)
 }
+
+function Register-Cmder(){
+    [CmdletBinding()]
+    Param
+    (
+        # Text for the context menu item.
+        $MenuText = "Cmder Here"
+
+        , # Defaults to the current cmder directory when run from cmder.
+        $PathToExe = (Join-Path $env:CMDER_ROOT "cmder.exe")
+
+        , # Commands the context menu will execute.
+        $Command = "%V"
+
+        , # Defaults to the icons folder in the cmder package.
+        $icon = (Split-Path $PathToExe | join-path -ChildPath 'icons/cmder.ico')
+    )
+    Begin
+    {
+        New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT > $null
+    }
+    Process
+    {
+        New-Item         -Path "HKCR:\Directory\Shell\Cmder" -Force -Value $MenuText
+        New-ItemProperty -Path "HKCR:\Directory\Shell\Cmder" -Force -Name "Icon" -Value `"$icon`"
+        New-ItemProperty -Path "HKCR:\Directory\Shell\Cmder" -Force -Name "NoWorkingDirectory"
+        New-Item         -Path "HKCR:\Directory\Shell\Cmder\Command" -Force -Value "`"$PathToExe`" `"$Command`" "
+
+        New-Item         -Path "HKCR:\Directory\Background\Shell\Cmder" -Force -Value $MenuText
+        New-ItemProperty -Path "HKCR:\Directory\Background\Shell\Cmder" -Force -Name "Icon" -Value `"$icon`"
+        New-ItemProperty -Path "HKCR:\Directory\Background\Shell\Cmder" -Force -Name "NoWorkingDirectory"
+        New-Item         -Path "HKCR:\Directory\Background\Shell\Cmder\Command" -Force -Value "`"$PathToExe`" `"$Command`" "
+    }
+    End
+    {
+        Remove-PSDrive -Name HKCR
+    }
+}
+
+function Unregister-Cmder{
+    Begin
+    {
+        New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT > $null
+    }
+    Process
+    {
+        Remove-Item -Path "HKCR:\Directory\Shell\Cmder" -Recurse
+        Remove-Item -Path "HKCR:\Directory\Background\Shell\Cmder" -Recurse
+    }
+    End
+    {
+        Remove-PSDrive -Name HKCR
+    }
+}
+
+function Download-File {
+    param (
+        $Url,
+        $File
+    )
+    # I think this is the problem
+    $File = $File -Replace "/", "\"
+    Write-Verbose "Downloading from $Url to $File"
+    $wc = new-object System.Net.WebClient
+    if ($env:https_proxy) {
+      $wc.proxy = (new-object System.Net.WebProxy($env:https_proxy))
+    }
+    $wc.Proxy.Credentials=[System.Net.CredentialCache]::DefaultNetworkCredentials;
+    $wc.DownloadFile($Url, $File)
+}

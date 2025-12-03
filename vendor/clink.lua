@@ -199,7 +199,7 @@ local function set_prompt_filter()
     if uah ~= '' then uah = get_uah_color() .. uah end
     if cwd ~= '' then cwd = get_cwd_color() .. cwd end
 
-    local version_control = prompt_includeVersionControl and "{git}{hg}{svn}" or ""
+    local version_control = prompt_includeVersionControl and " {git}{hg}{svn}" or ""
 
     local prompt = "{uah}{cwd}" .. version_control .. cr .. get_lamb_color() .. "{env}{lamb}\x1b[0m "
     prompt = gsub_plain(prompt, "{uah}", uah)
@@ -702,6 +702,10 @@ for _,lua_module in ipairs(clink.find_files(completions_dir..'*.lua')) do
     end
 end
 
+-- If Cmder is launched with '/c [folderPath]', indicating Cmder is installed globally and
+-- each user has a private '[folderPath]\config' folder, Clink won't know about the global
+-- '%cmder_root%\config dir, so we need to load scripts from there before . Clink loads lua
+-- scripts from the profile directory given to it when it was injected.
 if clink.get_env('CMDER_USER_CONFIG') then
     local cmder_config_dir = clink.get_env('CMDER_ROOT')..'/config/'
     for _,lua_module in ipairs(clink.find_files(cmder_config_dir..'*.lua')) do

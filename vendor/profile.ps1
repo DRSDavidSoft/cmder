@@ -5,6 +5,11 @@
 # !!! THIS FILE IS OVERWRITTEN WHEN CMDER IS UPDATED
 # !!! Use "%CMDER_ROOT%\config\user_profile.ps1" to add your own startup commands
 
+if ($env:CMDER_DEBUG -and ($env:CMDER_DEBUG -match '^(1|true)$')) {
+    $DebugPreference = 'Continue'
+    $VerbosePreference = 'Continue'
+}
+
 $CMDER_INIT_START = Get-Date
 
 # Determine the script root if not already set
@@ -104,7 +109,7 @@ if ($null -ne $ENV:GIT_INSTALL_ROOT) {
 
 # Create 'vi' alias for 'vim' if vim is available
 if (Get-Command -Name "vim" -ErrorAction SilentlyContinue) {
-    New-Alias -name "vi" -value vim
+    New-Alias -name "vi" -value vim -errorAction SilentlyContinue
 }
 
 # PSReadline configuration
@@ -146,6 +151,10 @@ $env:gitLoaded = $null
     Microsoft.PowerShell.Utility\Write-Host $pwd.ProviderPath -NoNewLine -ForegroundColor Green
     Show-GitStatus -Path $pwd.ProviderPath
     Microsoft.PowerShell.Utility\Write-Host "`nλ" -NoNewLine -ForegroundColor "DarkGray"
+}
+
+if (Get-Module PSReadline -ErrorAction "SilentlyContinue") {
+    Set-PSReadlineOption -ExtraPromptLineCount 1
 }
 
 # Enhance Path

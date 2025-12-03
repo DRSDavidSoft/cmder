@@ -60,6 +60,10 @@ body:
 
           🗃 https://github.com/cmderdev/cmder/issues?q=is:issue
 
+        - Searched for existing issues (including the **closed** ones) for similar problems here:
+
+          🗃 https://github.com/cmderdev/cmder/issues?q=is:issue
+
         - Please understand that Cmder uses ConEmu as the default underlying Terminal Emulator.
 
           If your issue is regarding the **Terminal Emulator**, please visit the ConEmu issues page:

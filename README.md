@@ -60,7 +60,7 @@ The Cmder's user interface is also designed to be more eye pleasing, and you can
 | `/SINGLE`                 | Start Cmder in single mode.                                                              |
 | `/START [start_path]`     | Folder path to start in.                                                                 |
 | `/TASK [task_name]`       | Task to start after launch.                                                              |
-| `/X [ConEmu extras pars]` | Forwards parameters to ConEmu                                                            |
+| `-- [ConEmu extras pars]` | Forwards ALL remaining parameters to ConEmu.                                             |
 
 ## Context Menu Integration
 
@@ -218,6 +218,26 @@ You can write `*.cmd|*.bat`, `*.ps1`, and `*.sh` scripts and just drop them in t
    cmdstatus = false   # Opt out of Git status for 'Cmd.exe' shells.
    psstatus = false    # Opt out of Git status for 'Powershell.exe and 'Pwsh.exe' shells.
    shstatus = false    # Opt out of Git status for 'bash.exe' shells.
+ ```
+
+### Linux like 'profile.d' support for all supported shell types.
+You can write *.cmd|*.bat, *.ps1, and *.sh scripts and just drop them in the %CMDER_ROOT%\config\profile.d folder to add startup config to Cmder.
+
+|Shell|Cmder 'Profile.d' Scripts|
+| ------------- |:-------------:|
+|Cmder|%CMDER_ROOT%\config\profile.d\\*.bat and *.cmd|
+|Powershell|$ENV:CMDER_ROOT\config\profile.d\\*.ps1|
+|Bash/Mintty|$CMDER_ROOT/config/profile.d/*.sh|
+
+#### Git Status Opt-Out for `Cmd::Cmder*` Sessions
+
+ To disable Cmder prompt git status globally add the following to `~/.gitconfig` or locally for a single repo `[repo]/.git/config` and start a new session.
+
+ *Note: This configuration is not portable*
+
+ ```
+ [cmder]
+   status = false
  ```
 
 ### Aliases

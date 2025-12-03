@@ -85,6 +85,9 @@ if ($Compile) {
     if ($LastExitCode -ne 0) {
         throw "MSBuild failed to build the launcher executable."
     }
+    else {
+        Write-Verbose "successfully built Cmder v$Version!"
+    }
     Pop-Location
 }
 
@@ -114,8 +117,17 @@ if (-not $noVendor) {
     else { $ConEmuXml = "" }
 
     # Kill ssh-agent.exe if it is running from the $env:cmder_root we are building
+    $cmder_folder = $cmder_root.toString()
     foreach ($ssh_agent in $(Get-Process ssh-agent -ErrorAction SilentlyContinue)) {
-        if ([string]$($ssh_agent.path) -Match [string]$cmder_root.replace('\', '\\')) {
+        if ([string]$($ssh_agent.path) -Match $cmder_folder.Replace('\', '\\')) {
+            Write-Verbose $("Stopping " + $ssh_agent.path + "!")
+            Stop-Process $ssh_agent.id
+        }
+    }
+
+    # Kill ssh-agent.exe if it is running from the $env:cmder_root we are building
+    foreach ($ssh_agent in $(Get-Process ssh-agent -ErrorAction SilentlyContinue)) {
+        if ([string]$($ssh_agent.path) -Match [string]$cmder_root.replace('\','\\')) {
             Write-Verbose $("Stopping " + $ssh_agent.path + "!")
             Stop-Process $ssh_agent.id
         }
