@@ -238,6 +238,30 @@ function Show-GitStatus {
     }
 }
 
+function Invoke-ExCD {
+    param(
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [string[]]$Arguments
+    )
+
+    $path = ($Arguments -join ' ').Trim('"')
+
+    # Strip the /d switch if present (like cmd's 'cd /d'), as PowerShell's
+    # Set-Location already supports cross-drive navigation without it
+    if ($path -imatch '^/d\s*(.*)$') {
+        $path = $Matches[1].TrimStart()
+    }
+
+    # Expand leading '~' to the user's home directory, mirroring cmd behaviour
+    if ($path.StartsWith('~')) {
+        $path = $HOME + $path.Substring(1)
+    }
+
+    Set-Location $path
+}
+
+Set-Alias -Name excd -Value Invoke-ExCD -Option AllScope
+
 function Get-GitStatusSetting {
     $gitConfig = git --no-pager config -l 2>$null | Out-String
 
