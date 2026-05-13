@@ -244,7 +244,8 @@ function Invoke-ExCD {
         [string[]]$Arguments
     )
 
-    $path = ($Arguments -join ' ').Trim('"')
+    # Remove all double-quotes, mirroring cmd's: set excd=%excd:"=%
+    $path = ($Arguments -join ' ') -replace '"'
 
     # Strip the /d switch if present (like cmd's 'cd /d'), as PowerShell's
     # Set-Location already supports cross-drive navigation without it
@@ -255,6 +256,11 @@ function Invoke-ExCD {
     # Expand leading '~' to the user's home directory, mirroring cmd behaviour
     if ($path.StartsWith('~')) {
         $path = $HOME + $path.Substring(1)
+    }
+
+    if ([string]::IsNullOrWhiteSpace($path)) {
+        Set-Location $HOME
+        return
     }
 
     Set-Location $path
