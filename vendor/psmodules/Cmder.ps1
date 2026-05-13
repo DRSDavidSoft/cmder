@@ -267,6 +267,9 @@ function Invoke-ExCD {
 }
 
 Set-Alias -Name excd -Value Invoke-ExCD -Option AllScope
+# Override the built-in 'cd' alias so that '~' expansion and '/d' stripping
+# work consistently for users coming from bash or cmd.
+Set-Alias -Name cd -Value Invoke-ExCD -Option AllScope -Force
 
 function Get-GitStatusSetting {
     $gitConfig = git --no-pager config -l 2>$null | Out-String
