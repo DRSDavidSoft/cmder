@@ -238,6 +238,39 @@ function Show-GitStatus {
     }
 }
 
+function Invoke-ExCD {
+    param(
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [string[]]$Arguments
+    )
+
+    # Remove all double-quotes, mirroring cmd's: set excd=%excd:"=%
+    $path = ($Arguments -join ' ') -replace '"'
+
+    # Strip the /d switch if present (like cmd's 'cd /d'), as PowerShell's
+    # Set-Location already supports cross-drive navigation without it
+    if ($path -imatch '^/d\s*(.*)$') {
+        $path = $Matches[1].TrimStart()
+    }
+
+    # Expand leading '~' to the user's home directory, mirroring cmd behaviour
+    if ($path.StartsWith('~')) {
+        $path = $HOME + $path.Substring(1)
+    }
+
+    if ([string]::IsNullOrWhiteSpace($path)) {
+        Set-Location $HOME
+        return
+    }
+
+    Set-Location $path
+}
+
+Set-Alias -Name excd -Value Invoke-ExCD -Option AllScope
+# Override the built-in 'cd' alias so that '~' expansion and '/d' stripping
+# work consistently for users coming from bash or cmd.
+Set-Alias -Name cd -Value Invoke-ExCD -Option AllScope -Force
+
 function Get-GitStatusSetting {
     $gitConfig = git --no-pager config -l 2>$null | Out-String
 
